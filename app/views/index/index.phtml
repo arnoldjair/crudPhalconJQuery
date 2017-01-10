@@ -11,7 +11,24 @@
                 <div class="clearfix"></div>
             </div>
             <div class="panel-body">
-                Hola
+                <table class="table table-responsive table-hover" id="tableUsers">
+                    <thead>
+                        <tr>
+                            <th>
+                                Identificación
+                            </th>
+                            <th>
+                                Nombres
+                            </th>
+                            <th>
+                                Opciones
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -27,6 +44,12 @@
                 <h4 class="modal-title">Agregar Usuario</h4>
             </div>
             <div class="modal-body">
+
+                <div class="collapse" hidden id="msgAddUser">
+                    <a href="#" class="close" aria-label="close">&times;</a>
+                    <strong></strong>
+                </div>
+
                 <form class="form" id="formAddUser">
                     <div class="form-group">
                         <label>Identificación</label>
@@ -42,7 +65,7 @@
                     </div>
                     <div class="form-group">
                         <label>Género</label>
-                        <select class="form-control">
+                        <select class="form-control" name="genero">
                             <option value="m">Masculino</option>
                             <option value="f">Femenino</option>
                         </select>
@@ -70,6 +93,59 @@
             <div class="modal-footer">
                 <button type="button" id="btnAddUser" class="btn btn-success">Agregar</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="modalCrudPhal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Detalles Usuario</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="collapse" hidden id="msgAddUser">
+                    <a href="#" class="close" aria-label="close">&times;</a>
+                    <strong></strong>
+                </div>
+
+                <form class="form" id="formUserDetails">
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input type="text" name="identificacion" id="identificacion" class="form-control" disabled="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre completo</label>
+                        <input type="text" name="nombre" class="form-control" disabled="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de Nacimiento</label>
+                        <input type="text" class="form-control" name="fechaNacimiento" disabled="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Género</label>
+                        <input type="text" class="form-control" name="genero" disabled="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Estado Civil</label>
+                        <input type="text" class="form-control" name="estadoCivil" disabled="true">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <input type="text" name="direccion" class="form-control" disabled="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="text" name="telefono" class="form-control" disabled="true">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

@@ -18,7 +18,7 @@ class UsuarioController extends \Phalcon\Mvc\Controller {
             $input = $this->request->getJsonRawBody();
 
             $usuario = new Usuario();
-            $usuario->nombre = $input->nombres;
+            $usuario->nombre = $input->nombre;
             $usuario->identificacion = $input->identificacion;
             $usuario->fecha_nacimiento = $input->fechaNacimiento;
             $usuario->genero = $input->genero;
@@ -46,6 +46,29 @@ class UsuarioController extends \Phalcon\Mvc\Controller {
         } else {
             
         }
+    }
+
+    public function listAction() {
+        $list = Usuario::find();
+
+        return json_encode($list);
+    }
+
+    public function detailsAction() {
+
+        $id = $this->request->get("id");
+
+        $response = new Response();
+
+        $curr = Usuario::findFirst($id);
+
+        if (!$curr) {
+            $response->setStatusCode(500, "Internal Server Error");
+            $response->setJsonContent(["mensaje" => "Usuario inexistente"]);
+            return $response;
+        }
+
+        return json_encode($curr);
     }
 
 }
