@@ -151,6 +151,68 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalCrudPhal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Agregar Usuario</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="collapse" hidden id="msgAddUser">
+                    <a href="#" class="close" aria-label="close">&times;</a>
+                    <strong></strong>
+                </div>
+
+                <form class="form" id="formUpdateUser">
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input type="text" name="identificacion" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre completo</label>
+                        <input type="text" name="nombre" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de Nacimiento</label>
+                        <input type="text" id="fechaNacimiento" class="form-control" name="fechaNacimiento" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Género</label>
+                        <select class="form-control" name="genero">
+                            <option value="m">Masculino</option>
+                            <option value="f">Femenino</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado Civil</label>
+                        <select class="form-control" name="estadoCivil">
+                            <option value="s">Soltero</option>
+                            <option value="c">Casado</option>
+                            <option value="u">Unión libre</option>
+                            <option value="v">Viudo</option>
+                            <option value="z">Separado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <input type="text" name="direccion" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="text" name="telefono" class="form-control" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnUpdateUser" class="btn btn-success">Actualizar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalCrudPhal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -159,7 +221,7 @@
                 <h4 class="modal-title">Eliminar Usuario</h4>
             </div>
             <div class="modal-body">
-                
+
             </div>
             <div class="modal-footer">
                 <button id="btn-delete-user" type="button" class="btn btn-danger">Aceptar</button>

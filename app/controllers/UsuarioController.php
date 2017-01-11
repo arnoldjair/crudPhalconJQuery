@@ -95,4 +95,43 @@ class UsuarioController extends \Phalcon\Mvc\Controller {
         return $response;
     }
 
+    public function updateAction() {
+
+        $response = new Response();
+        $this->view->disable();
+
+        if ($this->request->isPost() == true) {
+            $input = $this->request->getJsonRawBody();
+
+            $id = $this->request->get("id");
+
+            $curr = Usuario::findFirst($id);
+
+            if (!$curr) {
+                $response->setStatusCode(500, "Internal Server Error");
+                $response->setJsonContent(["mensaje" => "Usuario inexistente"]);
+                return $response;
+            }
+
+            $curr->nombre = $input->nombre;
+            $curr->fecha_nacimiento = $input->fechaNacimiento;
+            $curr->genero = $input->genero;
+            $curr->estado_civil = $input->estadoCivil;
+            $curr->direccion = $input->direccion;
+            $curr->telefono = $input->telefono;
+
+            if (!$curr->validate()) {
+                $response->setStatusCode(500, "Internal Server Error");
+                $response->setJsonContent($curr->validationResult);
+                return $response;
+            }
+
+            if ($curr->save()) {
+                return json_encode($curr);
+            }
+        } else {
+            
+        }
+    }
+
 }

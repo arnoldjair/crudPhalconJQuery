@@ -9,6 +9,7 @@ var addUserUrl = baseUrl + "/usuario/add";
 var listUsersUrl = baseUrl + "/usuario/list";
 var userDetails = baseUrl + "/usuario/details";
 var delUser = baseUrl + "/usuario/delete";
+var updateUserUrl = baseUrl + "/usuario/update";
 
 $(function () {
     console.log("Arnold Jair Jimenez Vargas <arnoldjair at hotmail dot com>");
@@ -53,14 +54,19 @@ $(document).ready(function () {
 
                 row.append($("<td/>").text(r["identificacion"]));
                 row.append($("<td/>").text(r["nombre"]));
+                var td = $("<td/>");
                 var btn = '<button type="button" data-user-id=' + r["id"] + ' class="btn btn-default btn-sm">Detalles</button>';
-                row.append($(btn));
+                td.append(btn);
+                btn = '<button type="button" data-user-update-id=' + r["id"] + ' class="btn btn-success btn-sm">Editar</button>';
+                td.append(btn);
                 btn = '<button type="button" data-user-del-id=' + r["id"] + ' class="btn btn-danger btn-sm">Eliminar</button>';
-                row.append($(btn));
-
+                td.append(btn);
+                row.append(td)
                 table.append(row);
 
             });
+
+            //Detalles
 
             var tmp = $("[data-user-id]");
 
@@ -89,6 +95,8 @@ $(document).ready(function () {
                 });
             });
 
+            //Eliminar
+
             tmp = $("[data-user-del-id]");
 
             tmp.click(function (event) {
@@ -112,6 +120,37 @@ $(document).ready(function () {
                 $("#modalDelete .modal-body").append("<h1 class='text-danger'>¿Desea elminar el usuario?</h1>");
                 $("#modalDelete").modal("show");
             });
+
+            //Editar
+
+            tmp = $("[data-user-update-id]");
+
+            tmp.click(function (event) {
+                event.preventDefault();
+                var id = $(this).data("user-update-id");
+
+                sessionStorage.setItem("currUserID", id);
+                //Recuperar el usuario actual
+                var jqxhr = $.post(userDetails + "&id=" + id, {}, function (data) {
+                    var currUser = JSON.parse(data);
+                    var currInput = $("input[name='identificacion']");
+                    currInput.val(currUser.identificacion);
+                    currInput = $("input[name='nombre']");
+                    currInput.val(currUser.nombre);
+                    currInput = $("input[name='fechaNacimiento']");
+                    currInput.val(currUser.fecha_nacimiento);
+                    currInput = $("input[name='genero']");
+                    currInput.val(currUser.genero);
+                    currInput = $("input[name='estadoCivil']");
+                    currInput.val(currUser.estado_civil);
+                    currInput = $("input[name='direccion']");
+                    currInput.val(currUser.direccion);
+                    currInput = $("input[name='telefono']");
+                    currInput.val(currUser.telefono);
+                    $("#modalUpdate").modal("show");
+                });
+            });
+
         });
     };
 
@@ -149,6 +188,34 @@ $(document).ready(function () {
             obj.fechaNacimiento = new Date(obj.fechaNacimiento);
             var jqxhr = $.post(addUserUrl, JSON.stringify(obj), function (data) {
                 $("#modalCrud").modal("hide");
+                crud.listUsers();
+            });
+
+            jqxhr.fail(function (data) {
+                console.log(data);
+                $("#msgAddUser strong").html(data.responseJSON.mensaje);
+                $("#msgAddUser").addClass("alert alert-danger").show();
+                $(".close").click(function (event) {
+                    $("#msgAddUser").hide();
+                });
+            });
+        }
+
+
+    });
+
+    $("#btnUpdateUser").click(function (event) {
+        event.preventDefault();
+
+        var form = $("#formUpdateUser");
+
+        if (crud.validate(form)) {
+            var obj = $("#formUpdateUser").serializeObject();
+            obj.fechaNacimiento = new Date(obj.fechaNacimiento);
+            currUserId = sessionStorage.getItem("currUserID");
+            var jqxhr = $.post(updateUserUrl + "&id=" + currUserId, JSON.stringify(obj), function (data) {
+                $("#modalUpdate").modal("hide");
+                sessionStorage.clear();
                 crud.listUsers();
             });
 
