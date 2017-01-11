@@ -35,6 +35,7 @@ $(document).ready(function () {
     $("#fechaNacimiento").datepicker();
 
     crud.showAddUser = function () {
+        $("#formAddUser")[0].reset();
         $("#modalCrud").modal("show");
     };
 
@@ -92,24 +93,57 @@ $(document).ready(function () {
         });
     };
 
+    crud.validate = function (form) {
+        var inputs = $(form).find(":input[required]:visible");
+        var ret = true;
+        $.each(inputs, function (index, obj) {
+            console.log();
+            if (!$(obj)[0].validity.valid) {
+                $(obj)
+                        .popover({
+                            content: "Campo requerido",
+                            trigger: "manual"
+                        })
+                        .on('shown.bs.popover', function () {
+                            var $pop = $(this);
+                            setTimeout(function () {
+                                $pop.popover('hide');
+                            }, 2000);
+                        })
+                        .popover("show");
+                ret = false;
+            }
+        });
+        return ret;
+    };
+
     $("#btnAddUser").click(function (event) {
         event.preventDefault();
-        var obj = $("#formAddUser").serializeObject();
-        obj.fechaNacimiento = new Date(obj.fechaNacimiento);
-        var jqxhr = $.post(addUserUrl, JSON.stringify(obj), function (data) {
-            $("#modalCrud").modal("hide");
-            crud.listUsers();
-        });
 
-        jqxhr.fail(function (data) {
-            console.log(data);
-            $("#msgAddUser strong").html(data.responseJSON.mensaje);
-            $("#msgAddUser").addClass("alert alert-danger").show();
-            $(".close").click(function (event) {
-                $("#msgAddUser").hide();
+        var form = $("#formAddUser");
+
+        if (crud.validate(form)) {
+            var obj = $("#formAddUser").serializeObject();
+            obj.fechaNacimiento = new Date(obj.fechaNacimiento);
+            var jqxhr = $.post(addUserUrl, JSON.stringify(obj), function (data) {
+                $("#modalCrud").modal("hide");
+                crud.listUsers();
             });
-        });
+
+            jqxhr.fail(function (data) {
+                console.log(data);
+                $("#msgAddUser strong").html(data.responseJSON.mensaje);
+                $("#msgAddUser").addClass("alert alert-danger").show();
+                $(".close").click(function (event) {
+                    $("#msgAddUser").hide();
+                });
+            });
+        }
+
+
     });
+
+
 
     crud.listUsers();
 
