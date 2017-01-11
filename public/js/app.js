@@ -8,6 +8,7 @@ var baseUrl = "/crud";
 var addUserUrl = baseUrl + "/usuario/add";
 var listUsersUrl = baseUrl + "/usuario/list";
 var userDetails = baseUrl + "/usuario/details";
+var delUser = baseUrl + "/usuario/delete";
 
 $(function () {
     console.log("Arnold Jair Jimenez Vargas <arnoldjair at hotmail dot com>");
@@ -43,10 +44,8 @@ $(document).ready(function () {
 
     crud.listUsers = function () {
 
-        //$("#tableUsers tbody").remove();
-        $("#tableUsers tbody").empty();
-
         $.get(listUsersUrl, {}, function (data) {
+            $("#tableUsers tbody").empty();
             var table = $("#tableUsers");
 
             $.each(JSON.parse(data), function (rowIndex, r) {
@@ -54,7 +53,9 @@ $(document).ready(function () {
 
                 row.append($("<td/>").text(r["identificacion"]));
                 row.append($("<td/>").text(r["nombre"]));
-                var btn = '<input type="button" data-user-id=' + r["id"] + ' class="btn btn-default" value="Detalles"/>';
+                var btn = '<button type="button" data-user-id=' + r["id"] + ' class="btn btn-default btn-sm">Detalles</button>';
+                row.append($(btn));
+                btn = '<button type="button" data-user-del-id=' + r["id"] + ' class="btn btn-danger btn-sm">Eliminar</button>';
                 row.append($(btn));
 
                 table.append(row);
@@ -86,9 +87,30 @@ $(document).ready(function () {
                     currInput.val(currUser.telefono);
                     $("#modalDetails").modal("show");
                 });
+            });
 
+            tmp = $("[data-user-del-id]");
 
+            tmp.click(function (event) {
+                event.preventDefault();
 
+                var id = $(this).data("user-del-id");
+                $("#btn-delete-user").click(function (event) {
+                    var jqxhr = $.ajax({
+                        url: delUser + '&id=' + id,
+                        type: 'DELETE',
+                        success: function (data) {
+                            $("#modalDelete .modal-body").html("").append("<h1 class='text-success'>" + data.mensaje + "</h1>");
+                            $("#btn-delete-user").hide();
+                            $("#btn-cancel-delete").html("Aceptar").click(function (event) {
+                                crud.listUsers();
+                                $("#modalDelete").modal("hide");
+                            });
+                        }
+                    });
+                });
+                $("#modalDelete .modal-body").append("<h1 class='text-danger'>¿Desea elminar el usuario?</h1>");
+                $("#modalDelete").modal("show");
             });
         });
     };

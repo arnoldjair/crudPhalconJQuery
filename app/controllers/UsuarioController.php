@@ -71,4 +71,28 @@ class UsuarioController extends \Phalcon\Mvc\Controller {
         return json_encode($curr);
     }
 
+    public function deleteAction() {
+        $id = $this->request->get("id");
+
+        $response = new Response();
+
+        $curr = Usuario::findFirst($id);
+
+        if (!$curr) {
+            $response->setStatusCode(500, "Internal Server Error");
+            $response->setJsonContent(["mensaje" => "Usuario inexistente"]);
+            return $response;
+        }
+
+        if ($curr->delete() === false) {
+            $response->setStatusCode(500, "Internal Server Error");
+            $response->setJsonContent(["mensaje" => $curr->getMessages()]);
+            return $response;
+        }
+
+        $response->setStatusCode(200, "OK");
+        $response->setJsonContent(["mensaje" => "Usuario eliminado satisfactoriamente"]);
+        return $response;
+    }
+
 }
